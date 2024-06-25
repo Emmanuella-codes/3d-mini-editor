@@ -42,13 +42,13 @@ function App() {
   };
 
   const handleCanvasClick = (e: any) => {
-    if (!cameraRef.current || !sceneRef.current) return;
+    const canvasBounds = canvasRef.current.getBoundingClientRect();
 
     const camera = cameraRef.current;
     const scene = sceneRef.current;
 
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    mouse.x = ((e.clientX - canvasBounds.left) / canvasBounds.width) * 2 - 1;
+    mouse.y = -((e.clientY - canvasBounds.top) / canvasBounds.height) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
@@ -58,7 +58,7 @@ function App() {
       const point = intersect.point;
       const newHotspot = {
         position: point,
-        label: `Hotspot${hotspots.length + 1}`,
+        label: "",
       };
       setHotspots([...hotspots, newHotspot]);
     }
@@ -68,6 +68,11 @@ function App() {
     const updatedHotspots = hotspots.map((h, i) =>
       i === idx ? { ...h, label: newLabel } : h
     );
+    setHotspots(updatedHotspots);
+  };
+
+  const handleDeleteHotspot = (idx: number) => {
+    const updatedHotspots = hotspots.filter((_, i) => i !== idx);
     setHotspots(updatedHotspots);
   };
 
@@ -83,7 +88,7 @@ function App() {
   return (
     <>
       <div className="w-screen flex flex-col h-dvh px-4 pb-3">
-        <Header />
+        <Header hotspots={hotspots} onDeleteHotspot={handleDeleteHotspot} />
         <div className="w-full flex mt-6 md:px-4 gap-2 md:gap-7 md:max-h-[450px]">
           <main className="w-full">
             <div className="w-full pb-6">
@@ -110,7 +115,7 @@ function App() {
             </div>
             <div className="h-[70vh]">
               <div className=" w-full flex items-center border">
-                <Canvas onClick={handleCanvasClick} ref={canvasRef}>
+                <Canvas onClick={handleCanvasClick} ref={canvasRef} camera={{ fov:70, position: [0,0,15]}}>
                   <ContextBridge>
                     <ambientLight intensity={0.5} />
                     <pointLight position={[10, 10, 10]} />
@@ -127,9 +132,9 @@ function App() {
                           key={`h-${idx}`}
                           position={hotspot.position}
                           label={hotspot.label}
-                          onLabelChange={(label) =>
-                            handleLabelChange(label, idx)
-                          }
+                          onLabelChange={handleLabelChange}
+                          idx={idx}
+                          onDelete={() => handleDeleteHotspot(idx)}
                         />
                       ))}
                     </Suspense>
