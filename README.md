@@ -1,4 +1,9 @@
-# React + TypeScript + Vite
+# 3D Mini-Editor
+
+## Overview
+This project is a mini-editor that allows users to import a 3D object (.GLB) into a 3D scene, render it, and add labeled hotspots. Built using React and Three.js.
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
