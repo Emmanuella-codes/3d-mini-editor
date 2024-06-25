@@ -37,7 +37,7 @@ function App() {
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(scene.children, true);
+    const intersects = raycaster.intersectObjects(scene.children, true);
 
     if (intersects.length > 0) {
       const intersect = intersects[0];
@@ -57,7 +57,7 @@ function App() {
       <div className="w-screen flex flex-col h-dvh px-4 pb-3">
         <Header />
         <div className="w-full flex mt-6 md:px-4 gap-2 md:gap-7 md:max-h-[450px]">
-          <main className=" w-full">
+          <main className="w-full">
             <div className="w-full pb-6">
               <input
                 type="file"
@@ -79,5 +79,6 @@ function App() {
     </>
   );
 }
+
 
 export default App;

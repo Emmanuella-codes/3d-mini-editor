@@ -41,7 +41,7 @@ type ModelLoaderProps = {
 const ModelLoader: FC<ModelLoaderProps> = ({ url }) => {
   const { scene } = useGLTF(url);
   const { camera } = useThree();
-  const sceneRef = useRef<THREE.Group>(null)
+  const sceneRef = useRef<THREE.Group>(null);
 
   useEffect(() => {
     if (scene) {

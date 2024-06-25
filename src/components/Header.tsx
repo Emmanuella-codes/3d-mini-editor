@@ -1,6 +1,6 @@
 import DrawerCmp from "./DrawerCmp";
 import logo from "/assets/logo.svg";
-import deleteIcon from "/assets/delete.svg"
+import deleteIcon from "/assets/delete.svg";
 
 const Header = () => {
   return (
@@ -17,8 +17,10 @@ const Header = () => {
                 <img src={deleteIcon} alt="delete" className="w-5" />
               </span>
             </button>
-            <div className="border-b-2 mt-4">
-
+            <div className="border-t-2 mt-4">
+              <div className="pt-3">
+                <p>Hotspots</p>
+              </div>
             </div>
           </div>
         }
