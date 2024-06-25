@@ -1,81 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Html, OrbitControls, useGLTF } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
-import { FC, Suspense, useEffect, useRef } from "react";
-import * as THREE from "three";
+import { Html, useGLTF } from "@react-three/drei";
+import { FC, useRef } from "react";
+import { Vector3 } from "three";
 
-type MainViewProps = {
-  modelUrl: string;
-  hotspots: HotspotProps[];
-  onClick: (e: any) => void;
+type HotspotProps = {
+  position: Vector3;
+  label: string;
+  onLabelChange: (e: any) => void;
 };
-
-const MainView: FC<MainViewProps> = ({ modelUrl, hotspots, onClick }) => {
-  return (
-    <div className=" w-full flex items-center border">
-      <Canvas onPointerDown={onClick}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <OrbitControls enablePan={true} enableZoom={true} />
-        <Suspense fallback={null}>
-          {modelUrl && <ModelLoader url={modelUrl} />}
-          {hotspots.map((hotspot, idx) => (
-            <Hotspot
-              key={`h-${idx}`}
-              position={hotspot.position}
-              label={hotspot.label}
-            />
-          ))}
-        </Suspense>
-      </Canvas>
-    </div>
-  );
-};
-
-export default MainView;
 
 type ModelLoaderProps = {
   url: string;
+  onClick: (e: any) => void;
 };
 
-const ModelLoader: FC<ModelLoaderProps> = ({ url }) => {
+export const ModelLoader: FC<ModelLoaderProps> = ({ url, onClick }) => {
   const { scene } = useGLTF(url);
-  const { camera } = useThree();
-  const sceneRef = useRef<THREE.Group>(null);
+  const meshRef = useRef();
 
-  useEffect(() => {
-    if (scene) {
-      const fitIntoView = () => {
-        const box = new THREE.Box3().setFromObject(scene);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const fov = 70;
-        const cameraZ = Math.abs(
-          (maxDim / 4) * Math.tan((Math.PI * fov) / 360)
-        );
-        camera.position.set(center.x, center.y, cameraZ);
-        camera.lookAt(center.x, center.y, center.z);
-      };
-      fitIntoView();
-    }
-  }, [camera, scene]);
-
-  return <primitive ref={sceneRef} object={scene} />;
+  return <primitive ref={meshRef} object={scene} onClick={onClick} />;
 };
 
-type HotspotProps = {
-  position: [number, number, number];
-  label: string;
-};
-
-const Hotspot: FC<HotspotProps> = ({ position, label }) => {
+export const Hotspot: FC<HotspotProps> = ({ position, label, onLabelChange }) => {
   return (
     <mesh position={position}>
-      <sphereBufferGeometry args={[0.1, 32, 32]} />
-      <meshStandardMaterial color="blue" />
-      <Html position={[0, 0.2, 0]}>
-        <div className="text-white p-2 bg-red-800">{label}</div>
+      <sphereGeometry args={[0.1, 32, 32]} />
+      <meshStandardMaterial color="red" />
+      <Html>
+        <div style={{ color: "white", padding: 2, backgroundColor: "#000" }}>
+          <input type="text" value={label} onChange={(e) => onLabelChange(e.target.value)} />
+        </div>
       </Html>
     </mesh>
   );
