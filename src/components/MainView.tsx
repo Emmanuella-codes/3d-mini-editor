@@ -3,6 +3,7 @@ import { Html, useGLTF } from "@react-three/drei";
 import { FC, useEffect, useRef, useState } from "react";
 import deleteIcon from "/assets/delete.svg";
 import { Vector3 } from "three";
+import { useFrame } from "@react-three/fiber";
 
 type HotspotProps = {
   position: Vector3;
@@ -10,6 +11,7 @@ type HotspotProps = {
   onLabelChange: (label: string, idx: number) => void;
   idx: number;
   onDelete: () => void;
+  animate: boolean;
 };
 
 type ModelLoaderProps = {
@@ -30,7 +32,16 @@ export const Hotspot: FC<HotspotProps> = ({
   onLabelChange,
   idx,
   onDelete,
+  animate
 }) => {
+  const meshRef = useRef<any>();
+
+  useFrame(() => {
+    if (animate && meshRef.current) {
+      meshRef.current.rotation.y += 0.01;
+    }
+  });
+  
   const [localLabel, setLocalLabel] = useState(label);
 
   useEffect(() => {
@@ -46,7 +57,7 @@ export const Hotspot: FC<HotspotProps> = ({
   };
 
   return (
-    <mesh position={position}>
+    <mesh position={position} ref={meshRef}>
       <sphereGeometry args={[0.1, 32, 32]} />
       <meshStandardMaterial color="red" />
       <Html>
@@ -55,6 +66,7 @@ export const Hotspot: FC<HotspotProps> = ({
             color: "#000",
             padding: 2,
             backgroundColor: "#000",
+            position: "relative"
           }}
         >
           <input
@@ -63,7 +75,7 @@ export const Hotspot: FC<HotspotProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <button onClick={onDelete} className="w-6">
+          <button onClick={onDelete} className="w-6 absolute top-0">
             <img src={deleteIcon} alt="delete" className="w-5" />
           </button>
         </div>

@@ -3,6 +3,8 @@ import logo from "/assets/logo.svg";
 import edit from "/assets/edit.svg";
 import save from "/assets/save.svg";
 import deleteIcon from "/assets/delete.svg";
+import rotate from "/assets/rotate.svg";
+import stop from "/assets/stop.svg";
 import { Vector3 } from "three";
 import { FC } from "react";
 
@@ -14,12 +16,26 @@ type HotspotProps = {
 type HeaderProps = {
   hotspots: HotspotProps[];
   onDeleteHotspot: (idx: number) => void;
-  editLabel?: boolean;
-  onEditLabelClick?: () => void;
-  onSaveLabelClick?: () => void;
+  onEditLabelClick: (idx: number) => void;
+  onSaveLabelClick: () => void;
+  newLabel: string;
+  editLabelIdx: number | null;
+  setNewLabel: (label: string) => void;
+  toggleAnimation: () => void;
+  animate: boolean;
 };
 
-const Header: FC<HeaderProps> = ({ hotspots, onDeleteHotspot, editLabel, onEditLabelClick, onSaveLabelClick }) => {
+const Header: FC<HeaderProps> = ({
+  hotspots,
+  onDeleteHotspot,
+  editLabelIdx,
+  onEditLabelClick,
+  onSaveLabelClick,
+  newLabel,
+  setNewLabel,
+  toggleAnimation,
+  animate,
+}) => {
   return (
     <div className="w-full flex flex-row">
       <div className="w-full py-6">
@@ -33,30 +49,49 @@ const Header: FC<HeaderProps> = ({ hotspots, onDeleteHotspot, editLabel, onEditL
                 <p>Hotspots</p>
                 <div className="flex flex-col gap-4 mt-2">
                   {hotspots.map((h, idx) => (
-                    <div
-                      key={idx}
-                      className="w-1/2 flex flex-row gap-4 border py-3 pl-4 rounded-xl"
-                    >
-                      <p>{h.label}</p>
-                      {editLabel ? (
-                        <button onClick={onSaveLabelClick}>
-                          <img src={save} alt="save" className="w-5 border" />
+                    <div key={idx}>
+                      <div className="w-1/2 flex flex-row gap-4 border py-3 pl-4 rounded-xl">
+                        <p>{h.label}</p>
+                        {editLabelIdx === idx ? (
+                          <button onClick={onSaveLabelClick}>
+                            <img src={save} alt="save" className="w-5 border" />
+                          </button>
+                        ) : (
+                          <button onClick={() => onEditLabelClick(idx)}>
+                            <img src={edit} alt="edit" className="w-5 border" />
+                          </button>
+                        )}
+                        <button onClick={() => onDeleteHotspot(idx)}>
+                          <img
+                            src={deleteIcon}
+                            alt="delete"
+                            className="w-5 border"
+                          />
                         </button>
-                      ) : (
-                        <button onClick={onEditLabelClick}>
-                          <img src={edit} alt="edit" className="w-5 border" />
-                        </button>
-                      )}
-                      <button onClick={() => onDeleteHotspot(idx)}>
-                        <img
-                          src={deleteIcon}
-                          alt="delete"
-                          className="w-5 border"
+                      </div>
+                      {editLabelIdx === idx && (
+                        <input
+                          type="text"
+                          value={newLabel}
+                          onChange={(e) => setNewLabel(e.target.value)}
                         />
-                      </button>
+                      )}
                     </div>
                   ))}
                 </div>
+              </div>
+              <div>
+                <button
+                  onClick={toggleAnimation}
+                  className="flex flex-row items-center gap-2 py-2 justify-center rounded-xl w-2/5 border"
+                >
+                  <span>animate</span>
+                  <img
+                    src={animate ? stop : rotate}
+                    alt="rotate"
+                    className="w-5 border"
+                  />
+                </button>
               </div>
             </div>
           </div>
