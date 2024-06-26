@@ -17,6 +17,8 @@ type HotspotProps = {
 function App() {
   const [modelUrl, setModelUrl] = useState("");
   const [hotspots, setHotspots] = useState<HotspotProps[]>([]);
+  const [editLabelIdx, setEditLabelIdx] = useState<number | null>(null);
+  const [newLabel, setNewLabel] = useState<string>("");
   const canvasRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<any>(null);
@@ -76,6 +78,19 @@ function App() {
     setHotspots(updatedHotspots);
   };
 
+  const handleEditLabelClick = (idx: number) => {
+    setEditLabelIdx(idx);
+    setNewLabel(hotspots[idx].label);
+  };
+
+  const handleSaveLabelClick = () => {
+    if (editLabelIdx !== null) {
+      handleLabelChange(newLabel, editLabelIdx);
+      setEditLabelIdx(null);
+      setNewLabel("");
+    }
+  };
+
   const ContextBridge: FC<{ children: React.ReactNode }> = ({ children }) => {
     const { scene, camera } = useThree();
     useEffect(() => {
@@ -88,7 +103,15 @@ function App() {
   return (
     <>
       <div className="w-screen flex flex-col h-dvh px-4 pb-3">
-        <Header hotspots={hotspots} onDeleteHotspot={handleDeleteHotspot} />
+        <Header
+          hotspots={hotspots}
+          onDeleteHotspot={handleDeleteHotspot}
+          editLabelIdx={editLabelIdx}
+          newLabel={newLabel}
+          setNewLabel={setNewLabel}
+          onEditLabelClick={handleEditLabelClick}
+          onSaveLabelClick={handleSaveLabelClick}
+        />
         <div className="w-full flex mt-6 md:px-4 gap-2 md:gap-7 md:max-h-[450px]">
           <main className="w-full">
             <div className="w-full pb-6">
@@ -114,8 +137,12 @@ function App() {
               )}
             </div>
             <div className="h-[70vh]">
-              <div className=" w-full flex items-center border">
-                <Canvas onClick={handleCanvasClick} ref={canvasRef} camera={{ fov:70, position: [0,0,15]}}>
+              <div className=" w-full flex items-center border rounded-2xl">
+                <Canvas
+                  onClick={handleCanvasClick}
+                  ref={canvasRef}
+                  // camera={{ fov: 40, position: [0, 0, 15] }}
+                >
                   <ContextBridge>
                     <ambientLight intensity={0.5} />
                     <pointLight position={[10, 10, 10]} />

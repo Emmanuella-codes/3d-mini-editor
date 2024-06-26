@@ -55,6 +55,7 @@ export const Hotspot: FC<HotspotProps> = ({
             color: "#000",
             padding: 2,
             backgroundColor: "#000",
+            position: "relative"
           }}
         >
           <input
@@ -63,7 +64,7 @@ export const Hotspot: FC<HotspotProps> = ({
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          <button onClick={onDelete} className="w-6">
+          <button onClick={onDelete} className="w-6 absolute top-0">
             <img src={deleteIcon} alt="delete" className="w-5" />
           </button>
         </div>
