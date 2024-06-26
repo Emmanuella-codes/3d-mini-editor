@@ -19,6 +19,7 @@ function App() {
   const [hotspots, setHotspots] = useState<HotspotProps[]>([]);
   const [editLabelIdx, setEditLabelIdx] = useState<number | null>(null);
   const [newLabel, setNewLabel] = useState<string>("");
+  const [animate, setAnimate] = useState<boolean>(false);
   const canvasRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<any>(null);
@@ -91,6 +92,10 @@ function App() {
     }
   };
 
+  const toggleAnimation = () => {
+    setAnimate(!animate);
+  };
+
   const ContextBridge: FC<{ children: React.ReactNode }> = ({ children }) => {
     const { scene, camera } = useThree();
     useEffect(() => {
@@ -111,6 +116,8 @@ function App() {
           setNewLabel={setNewLabel}
           onEditLabelClick={handleEditLabelClick}
           onSaveLabelClick={handleSaveLabelClick}
+          toggleAnimation={toggleAnimation}
+          animate={animate}
         />
         <div className="w-full flex mt-6 md:px-4 gap-2 md:gap-7 md:max-h-[450px]">
           <main className="w-full">
@@ -162,6 +169,7 @@ function App() {
                           onLabelChange={handleLabelChange}
                           idx={idx}
                           onDelete={() => handleDeleteHotspot(idx)}
+                          animate={animate}
                         />
                       ))}
                     </Suspense>

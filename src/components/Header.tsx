@@ -3,6 +3,8 @@ import logo from "/assets/logo.svg";
 import edit from "/assets/edit.svg";
 import save from "/assets/save.svg";
 import deleteIcon from "/assets/delete.svg";
+import rotate from "/assets/rotate.svg";
+import stop from "/assets/stop.svg";
 import { Vector3 } from "three";
 import { FC } from "react";
 
@@ -19,6 +21,8 @@ type HeaderProps = {
   newLabel: string;
   editLabelIdx: number | null;
   setNewLabel: (label: string) => void;
+  toggleAnimation: () => void;
+  animate: boolean;
 };
 
 const Header: FC<HeaderProps> = ({
@@ -29,6 +33,8 @@ const Header: FC<HeaderProps> = ({
   onSaveLabelClick,
   newLabel,
   setNewLabel,
+  toggleAnimation,
+  animate,
 }) => {
   return (
     <div className="w-full flex flex-row">
@@ -73,6 +79,19 @@ const Header: FC<HeaderProps> = ({
                     </div>
                   ))}
                 </div>
+              </div>
+              <div>
+                <button
+                  onClick={toggleAnimation}
+                  className="flex flex-row items-center gap-2 py-2 justify-center rounded-xl w-2/5 border"
+                >
+                  <span>animate</span>
+                  <img
+                    src={animate ? stop : rotate}
+                    alt="rotate"
+                    className="w-5 border"
+                  />
+                </button>
               </div>
             </div>
           </div>
