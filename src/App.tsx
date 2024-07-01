@@ -24,6 +24,7 @@ function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<any>(null);
   const sceneRef = useRef<any>(null);
+  const isOrbiting = useRef<any>(false);
 
   const raycaster = new Raycaster();
   const mouse = new Vector2();
@@ -45,6 +46,7 @@ function App() {
   };
 
   const handleCanvasClick = (e: any) => {
+    if (isOrbiting.current) return;
     const canvasBounds = canvasRef.current.getBoundingClientRect();
 
     const camera = cameraRef.current;
@@ -96,6 +98,14 @@ function App() {
   //   setAnimate(!animate);
   // };
 
+  const handleOrbitStart = () => {
+    isOrbiting.current = true;
+  };
+
+  const handleOrbitEnd = () => {
+    isOrbiting.current = false;
+  };
+
   const ContextBridge: FC<{ children: React.ReactNode }> = ({ children }) => {
     const { scene, camera } = useThree();
     useEffect(() => {
@@ -144,22 +154,25 @@ function App() {
               )}
             </div>
             <div className="h-[70vh]">
-              <div className=" w-full flex items-center border rounded-2xl">
+              <div className="w-full flex items-center border rounded-2xl relative">
                 <Canvas
                   onClick={handleCanvasClick}
                   ref={canvasRef}
-                  // camera={{ fov: 40, position: [0, 0, 15] }}
+                  camera={{ fov: 40, position: [0, 0, 10] }}
+                  className="relative z-10"
                 >
                   <ContextBridge>
                     <ambientLight intensity={0.5} />
                     <pointLight position={[10, 10, 10]} />
-                    <OrbitControls enablePan={true} enableZoom={true} />
+                    <OrbitControls
+                      enablePan={true}
+                      enableZoom={true}
+                      onStart={handleOrbitStart}
+                      onEnd={handleOrbitEnd}
+                    />
                     <Suspense fallback={null}>
                       {modelUrl && (
-                        <ModelLoader
-                          url={modelUrl}
-                          onClick={handleCanvasClick}
-                        />
+                        <ModelLoader url={modelUrl} onClick={() => {}} />
                       )}
                       {hotspots.map((hotspot, idx) => (
                         <Hotspot
