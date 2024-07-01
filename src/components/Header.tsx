@@ -50,7 +50,7 @@ const Header: FC<HeaderProps> = ({
                 <div className="flex flex-col gap-4 mt-2">
                   {hotspots.map((h, idx) => (
                     <div key={idx}>
-                      <div className="w-1/2 flex flex-row gap-4 border py-3 pl-4 rounded-xl">
+                      <div className="w-1/2 flex flex-row gap-4 border py-3 px-4 rounded-xl">
                         <p>{h.label}</p>
                         {editLabelIdx === idx ? (
                           <button onClick={onSaveLabelClick}>
@@ -74,6 +74,7 @@ const Header: FC<HeaderProps> = ({
                           type="text"
                           value={newLabel}
                           onChange={(e) => setNewLabel(e.target.value)}
+                          className="border mt-2"
                         />
                       )}
                     </div>
