@@ -40,6 +40,7 @@ function App() {
 
   const handleDeleteFile = () => {
     setModelUrl("");
+    setHotspots([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -117,7 +118,7 @@ function App() {
 
   return (
     <>
-      <div className="w-screen flex flex-col h-dvh px-4 pb-3">
+      <div className="w-screen flex flex-col h-dvh px-4 lg:px-16 pb-3">
         <Header
           hotspots={hotspots}
           onDeleteHotspot={handleDeleteHotspot}
@@ -158,7 +159,7 @@ function App() {
                 <Canvas
                   onClick={handleCanvasClick}
                   ref={canvasRef}
-                  camera={{ fov: 40, position: [0, 0, 10] }}
+                  camera={{ fov: 20, position: [0, 0, 30] }}
                   className="relative z-10"
                 >
                   <ContextBridge>
