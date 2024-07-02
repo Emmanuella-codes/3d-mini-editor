@@ -19,7 +19,6 @@ function App() {
   const [hotspots, setHotspots] = useState<HotspotProps[]>([]);
   const [editLabelIdx, setEditLabelIdx] = useState<number | null>(null);
   const [newLabel, setNewLabel] = useState<string>("");
-  // const [animate, setAnimate] = useState<boolean>(false);
   const canvasRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<any>(null);
@@ -40,6 +39,7 @@ function App() {
 
   const handleDeleteFile = () => {
     setModelUrl("");
+    setHotspots([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -94,10 +94,6 @@ function App() {
     }
   };
 
-  // const toggleAnimation = () => {
-  //   setAnimate(!animate);
-  // };
-
   const handleOrbitStart = () => {
     isOrbiting.current = true;
   };
@@ -117,7 +113,7 @@ function App() {
 
   return (
     <>
-      <div className="w-screen flex flex-col h-dvh px-4 pb-3">
+      <div className="w-screen flex flex-col h-dvh px-4 lg:px-16 pb-3">
         <Header
           hotspots={hotspots}
           onDeleteHotspot={handleDeleteHotspot}
@@ -126,8 +122,6 @@ function App() {
           setNewLabel={setNewLabel}
           onEditLabelClick={handleEditLabelClick}
           onSaveLabelClick={handleSaveLabelClick}
-          // toggleAnimation={toggleAnimation}
-          // animate={animate}
         />
         <div className="w-full flex mt-6 md:px-4 gap-2 md:gap-7 md:max-h-[450px]">
           <main className="w-full">
@@ -158,7 +152,7 @@ function App() {
                 <Canvas
                   onClick={handleCanvasClick}
                   ref={canvasRef}
-                  camera={{ fov: 40, position: [0, 0, 10] }}
+                  camera={{ fov: 20, position: [0, 0, 30] }}
                   className="relative z-10"
                 >
                   <ContextBridge>

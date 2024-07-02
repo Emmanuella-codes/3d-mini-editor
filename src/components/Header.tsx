@@ -33,8 +33,6 @@ const Header: FC<HeaderProps> = ({
   onSaveLabelClick,
   newLabel,
   setNewLabel,
-  // toggleAnimation,
-  // animate,
 }) => {
   return (
     <div className="w-full flex flex-row">
@@ -81,19 +79,7 @@ const Header: FC<HeaderProps> = ({
                   ))}
                 </div>
               </div>
-              {/* <div>
-                <button
-                  onClick={toggleAnimation}
-                  className="flex flex-row items-center gap-2 py-2 justify-center rounded-xl w-2/5 border"
-                >
-                  <span>animate</span>
-                  <img
-                    src={animate ? stop : rotate}
-                    alt="rotate"
-                    className="w-5 border"
-                  />
-                </button>
-              </div> */}
+              
             </div>
           </div>
         }
