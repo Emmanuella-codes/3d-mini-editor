@@ -3,7 +3,7 @@ import { Html, useGLTF } from "@react-three/drei";
 import { FC, useEffect, useRef, useState } from "react";
 import deleteIcon from "/assets/delete.svg";
 import { Box3, Vector3 } from "three";
-// import { useFrame } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 
 type HotspotProps = {
   position: Vector3;
@@ -40,15 +40,14 @@ export const Hotspot: FC<HotspotProps> = ({
   onLabelChange,
   idx,
   onDelete,
-  // animate
 }) => {
-  const meshRef = useRef<any>();
+  const meshRef = useRef<any>(null);
 
-  // useFrame(() => {
-  //   if (animate && meshRef.current) {
-  //     meshRef.current.rotation.y += 0.01;
-  //   }
-  // });
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += 0.01;
+    }  
+  });
 
   const [localLabel, setLocalLabel] = useState(label);
 
@@ -70,7 +69,6 @@ export const Hotspot: FC<HotspotProps> = ({
       <meshStandardMaterial color="red" />
       <Html>
         <div
-          
           style={{
             color: "#000",
             padding: 2,
